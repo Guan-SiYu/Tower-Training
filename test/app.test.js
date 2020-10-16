@@ -1,9 +1,8 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-undef */
 const supertest = require('supertest')
 const app = require('../app')
 const Router = require('../router')
 
+const { expect } = global
 const request = supertest(app)
 
 describe('完整玩一遍游戏', () => {
@@ -17,20 +16,17 @@ describe('完整玩一遍游戏', () => {
 	})
 
 	/* ----- 第二题 ---- */
-	it('返回smaller', async (done) => {
+	it('返回smaller', async () => {
 		const response = await (await request.get(`/${flag - 1}`))
 		expect(response.text).toBe('smaller')
-		done()
 	})
-	it('返回bigger', async (done) => {
+	it('返回bigger', async () => {
 		const response = await request.get(`/${flag + 1}`)
 		expect(response.text).toBe('bigger')
-		done()
 	})
-	it('返回equal', async (done) => {
+	it('返回equal', async () => {
 		const response = await request.get(`/${flag}`)
 		expect(response.text).toBe('equal')
-		done()
 	})
 
 	/* ----- 第三题 ---- */
