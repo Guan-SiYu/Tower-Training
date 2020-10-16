@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-undef */
 const supertest = require('supertest')
 const app = require('../app')
 const Router = require('../router')
@@ -5,28 +7,45 @@ const Router = require('../router')
 const request = supertest(app)
 
 describe('完整玩一遍游戏', () => {
-	let flag	//	访问/start同时把flag记录下来
-	it('开始游戏', async (done) => {
+	let flag // 访问/start同时把flag记录下来
+	/* ----- 第一题 ---- */
+	it('开始游戏应返回ok', async (done) => {
 		const response = await request.get('/start')
-		// eslint-disable-next-line no-unused-vars
-		flag = await Router.getFlag() //	获取服务器生成的随机数
-		// eslint-disable-next-line no-undef
+		flag = await Router.getFlag() // 获取服务器生成的随机数
 		expect(response.text).toBe('ok')
 		done()
 	})
+
+	/* ----- 第二题 ---- */
+	it('返回smaller', async (done) => {
+		const response = await (await request.get(`/${flag - 1}`))
+		expect(response.text).toBe('smaller')
+		done()
+	})
+	it('返回bigger', async (done) => {
+		const response = await request.get(`/${flag + 1}`)
+		expect(response.text).toBe('bigger')
+		done()
+	})
+	it('返回equal', async (done) => {
+		const response = await request.get(`/${flag}`)
+		expect(response.text).toBe('equal')
+		done()
+	})
+
+	/* ----- 第三题 ---- */
 	it('服务器回复equal结束', (done) => {
 		async function toFind(left, right) {
 			const mid = Math.floor((left + right) / 2)
 			const response = await request.get(`/${mid}`)
 			const responseText = response.text
 			if (responseText === 'equal') {
-				// eslint-disable-next-line no-undef
 				expect(responseText).toBe('equal')
 				done()
-			} else if (responseText === 'smaller') { //	目标在左边
-				toFind(mid, right)
+			} else if (responseText === 'smaller') { // 目标在左边
+				await toFind(mid, right)
 			} else if (responseText === 'bigger') { // 目标在右边
-				toFind(left, mid)
+				await toFind(left, mid)
 			}
 		}
 		toFind(0, 101)
