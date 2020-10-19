@@ -3,32 +3,22 @@ const request = require('request')
 
 /* --------------------- CallBack ---------------------- */
 
-function toFind_cb(left, right, CallBack) {
+function toFind(left, right, callBack) {
 	const mid = Math.floor((left + right) / 2)
 	request(`http://localhost:3000/${mid}`, (error, response, body) => {
-		try {
-			if (response && response.statusCode === 200) {
-				if (body === 'equal') {
-					CallBack(mid)
-				} if (body === 'smaller') {
-					toFind_cb(mid, right, CallBack)
-				} else if (body === 'bigger') {
-					toFind_cb(left, mid, CallBack)
-				}
-			}
-		} catch {
-			return console.error('error:', error)
+		if (error) callBack(error)
+		if (response && response.statusCode === 200) {
+			if (body === 'smaller') return toFind(mid, right, callBack)
+			if (body === 'bigger') return toFind(left, mid, callBack)
+			callBack(null, mid) // body === 'equal'
 		}
 	})
 }
 // play the game:
-request('http://localhost:3000/start', (error, response) => {
-	try {
-		if ((response && response.statusCode === 200)) {
-			toFind_cb(0, 101, (foundNum) => console.log(`The foundNum is ${foundNum}`))
-		}
-	} catch {
-		console.error('error:', error)
+request('http://localhost:3000/start', (err, response) => {
+	if (err) console.log('get /start wrong ', err)
+	if ((response && response.statusCode === 200)) {
+		toFind(0, 101, (error, foundNum) => console.log(error || `The foundNum is ${foundNum}`))
 	}
 })
 
@@ -38,13 +28,9 @@ function toFind_pm(left, right) {
 	const mid = Math.floor((left + right) / 2)
 	return rp(`http://localhost:3000/${mid}`)
 		.then((responseText) => {
-			if (responseText === 'equal') {
-				return mid
-			} if (responseText === 'smaller') {
-				return toFind_pm(mid, right)
-			} if (responseText === 'bigger') {
-				return toFind_pm(left, mid) // return a promiseObj
-			}
+			if (responseText === 'smaller') return toFind_pm(mid, right)
+			if (responseText === 'bigger') return toFind_pm(left, mid) // return a promiseObj
+			return mid // responseText === 'equal'
 		})
 		.catch((err) => console.log(err))
 }
@@ -57,13 +43,9 @@ rp('http://localhost:3000/start')
 async function toFind_await(left, right) {
 	const mid = Math.floor((left + right) / 2)
 	const responseText = await rp(`http://localhost:3000/${mid}`)
-	if (responseText === 'equal') {
-		return mid // return a promiseObj(<value> = foundNum)
-	} if (responseText === 'smaller') {
-		return toFind_await(mid, right)
-	} if (responseText === 'bigger') {
-		return toFind_await(left, mid)
-	}
+	if (responseText === 'smaller') return toFind_await(mid, right)
+	if (responseText === 'bigger') return toFind_await(left, mid) // return a promiseObj
+	return mid // responseText === 'equal'=> return a promiseObj(<value> = foundNum)
 }
 
 // play the game:
