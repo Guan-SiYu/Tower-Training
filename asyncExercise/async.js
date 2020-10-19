@@ -14,13 +14,15 @@ function toFind(left, right, callBack) {
 		}
 	})
 }
-// play the game:
-request('http://localhost:3000/start', (err, response) => {
-	if (err) console.log('get /start wrong ', err)
-	if ((response && response.statusCode === 200)) {
-		toFind(0, 101, (error, foundNum) => console.log(error || `The foundNum is ${foundNum}`))
-	}
-})
+
+function runCallBack() {
+	request('http://localhost:3000/start', (err, response) => {
+		if (err) console.log('get /start wrong ', err)
+		if ((response && response.statusCode === 200)) {
+			toFind(0, 101, (error, foundNum) => console.log(error || `CallBack:The foundNum is ${foundNum}`))
+		}
+	})
+}
 
 /* --------------------- Promise ---------------------- */
 
@@ -34,9 +36,11 @@ function toFind_pm(left, right) {
 		})
 		.catch((err) => console.log(err))
 }
-// play the game:
-rp('http://localhost:3000/start')
-	.then(() => toFind_pm(1, 101)).then((foundNum) => console.log(`The foundNum is ${foundNum}`))
+
+function runPromise() {
+	rp('http://localhost:3000/start')
+		.then(() => toFind_pm(1, 101)).then((foundNum) => console.log(`Promise:The foundNum is ${foundNum}`))
+}
 
 /* --------------------- Async & Await ---------------------- */
 
@@ -48,6 +52,25 @@ async function toFind_await(left, right) {
 	return mid // responseText === 'equal'=> return a promiseObj(<value> = foundNum)
 }
 
-// play the game:
-rp('http://localhost:3000/start')
-	.then(() => toFind_await(1, 101)).then((foundNum) => console.log(`The foundNum is ${foundNum}`))
+function runAwait() {
+	rp('http://localhost:3000/start')
+		.then(() => toFind_await(1, 101)).then((foundNum) => console.log(`AsyncAwait:The foundNum is ${foundNum}`))
+}
+
+// test:
+function main(method) {
+	switch (method) {
+	case 'callback':
+		runCallBack()
+		break
+	case 'promise':
+		runPromise()
+		break
+	case 'await':
+		runAwait()
+		break
+	default:
+		return 'someThing error'
+	}
+}
+main('await')
