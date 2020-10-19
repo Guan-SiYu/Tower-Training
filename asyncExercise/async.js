@@ -26,7 +26,6 @@ function toFind_pm(left, right) {
 			if (responseText === 'bigger') return toFind_pm(left, mid) // return a promiseObj
 			return mid // responseText === 'equal'
 		})
-		.catch((err) => console.log(err))
 }
 
 /* --------------------- Async & Await ---------------------- */
@@ -40,19 +39,24 @@ async function toFind_await(left, right) {
 }
 
 // test:
-function main() {
-	rp('http://localhost:3000/start')
-		.then(() => toFind_pm(1, 101)).then((foundNum) => console.log(`Promise:The foundNum is ${foundNum}`))
-		.then(() => rp('http://localhost:3000/start'))
-		.then(() => toFind_await(1, 101))
-		.then((foundNum) => console.log(`AsyncAwait:The foundNum is ${foundNum}`))
-		.then(() => {
-			request('http://localhost:3000/start', (err, response) => {
-				if (err) console.log('get /start wrong ', err)
-				if ((response && response.statusCode === 200)) {
-					toFind(0, 101, (error, foundNum) => console.log(error || `CallBack:The foundNum is ${foundNum}`))
-				}
-			})
+async function main(left, right) {
+	try {
+		// promise
+		await rp('http://localhost:3000/start')
+		const numPm = await toFind_pm(left, right)
+		console.log(`Promise:The foundNum is ${numPm}`)
+		// async & await
+		await rp('http://localhost:3000/start')
+		const numAwait = await toFind_await(left, right)
+		console.log(`AsyncAwait:The foundNum is ${numAwait}`)
+		// callback
+		request('http://localhost:3000/start', (err, response) => {
+			if ((response && response.statusCode === 200)) {
+				toFind(left, right, (error, foundNum) => console.log(error || `CallBack:The foundNum is ${foundNum}`))
+			}
 		})
+	} catch (err) {
+		console.log(err)
+	}
 }
-main()
+main(1, 101)
