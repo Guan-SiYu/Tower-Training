@@ -73,12 +73,12 @@ describe('注册->登录->游戏', () => {
 				const responseText = await rp({
 					method: 'GET',
 					uri: 'http://localhost:5000/start/game',
-					body: { userInput: mid },
+					body: { userInput: String(mid) },
 					json: true,
 				})
 				if (responseText === 'smaller') await play(mid, right)
 				if (responseText === 'bigger') await play(left, mid)
-				if (responseText === 'bigger') {
+				if (responseText === 'equal') {
 					expect(responseText).toBe('equal')
 					done()
 				}
