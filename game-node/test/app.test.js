@@ -68,8 +68,13 @@ describe('注册->登录->游戏', () => {
 			async function play(left, right) {
 				const mid = Math.floor((left + right) / 2)
 				const responseText = await rp({
+<<<<<<< HEAD:game-node/test/app.test.js
 					method: 'POST',
 					uri: 'http://localhost:5000/start/play',
+=======
+					method: 'GET',
+					uri: 'http://localhost:5000/start/game',
+>>>>>>> df47633a6b4de6f3f046a7d7d6162b9c58434958:Game-App/game-node/test/app.test.js
 					body: { userInput: String(mid) },
 					json: true,
 				})
