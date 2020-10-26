@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const session = require('express-session')
-
+const cors = require('express-cors')
 // 模块引入
 const game = require('./routes/game')
 const register = require('./routes/register')
@@ -20,18 +20,9 @@ mongoose.connect(
 // 中间件
 app.use(express.json()) // 如果请求体是json类型 就设置好req.body
 // 设置跨域请求
-app.all('*', (req, res, next) => {
-	res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-	res.header('Access-Control-Allow-Credentials', true)
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild',
-	)
-	res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-	res.header('X-Powered-By', ' 3.2.1')
-	res.header('Content-Type', 'application/json;charset=utf-8')
-	next()
-})
+app.use(cors({
+    allowedOrigins: ['myLocalhost', 'http://localhost:3000']
+}))
 
 app.use(
 	session({

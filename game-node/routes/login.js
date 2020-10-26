@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
 	console.log(req.session)
 
 	// 客户端显示
-	res.send(req.body.name)
+	res.send(`Hello ${req.body.name}`)
 })
 
 module.exports = router

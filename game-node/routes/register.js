@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 	// 将user对象保存到数据库
 	await user.save(user)
 	// 返回客户端结果
-	res.send(user.name)
+	res.send(`Hello ${user.name}`)
 })
 
 module.exports = router

@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Ipt from "./ipt";
-// import Select from "./select";
 class Form extends Component {
-  // state = {data:{},errObj:{}};
 
   validateChange = (e) => {
     const schemaTarget = { [e.currentTarget.id]: e.currentTarget.value };
@@ -37,6 +35,10 @@ class Form extends Component {
     });
     this.doSubmit();
   };
+  handleReset = (e) =>{
+	  e.preventDefault();
+	  this.doReset()
+  }
 
   renderInput(id, title, defaultValue, type = "text") {
     return (
@@ -62,6 +64,17 @@ class Form extends Component {
       </button>
     );
   }
+  renderReset = (btnName) => {
+    return (
+      <button
+        type="reset"
+		className="btn btn-primary"
+		onClick={this.handleReset}
+      >
+        {btnName}
+      </button>
+    );
+  };
 }
 
 export default Form;

@@ -3,7 +3,7 @@ const { User } = require('../models/user')
 
 const { expect } = global
 
-let server
+let server = require('../app')
 
 const postOption = (name, password, uri) => ({
 	method: 'POST',
@@ -14,9 +14,6 @@ const postOption = (name, password, uri) => ({
 })
 
 describe('注册->登录->游戏', () => {
-	beforeEach(() => {
-		 server = require('../app')
-	})
 	afterAll(async () => {
 		await User.remove()
 		await server.close()
@@ -71,14 +68,14 @@ describe('注册->登录->游戏', () => {
 			async function play(left, right) {
 				const mid = Math.floor((left + right) / 2)
 				const responseText = await rp({
-					method: 'GET',
-					uri: 'http://localhost:5000/start/game',
-					body: { userInput: mid },
+					method: 'POST',
+					uri: 'http://localhost:5000/start/play',
+					body: { userInput: String(mid) },
 					json: true,
 				})
 				if (responseText === 'smaller') await play(mid, right)
 				if (responseText === 'bigger') await play(left, mid)
-				if (responseText === 'bigger') {
+				if (responseText === 'equal') {
 					expect(responseText).toBe('equal')
 					done()
 				}
