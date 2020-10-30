@@ -1,0 +1,36 @@
+{
+    "name": "learnnode",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "jest --watch --verbose"
+    },
+    "jest": {
+        "testEnvironment": "node"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.11.0",
+        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jsx-a11y": "^6.3.1",
+        "eslint-plugin-react": "^7.21.5",
+        "jest": "^26.6.0",
+        "supertest": "^5.0.0",
+        "supertest-session": "^4.1.0"
+    },
+    "dependencies": {
+        "bcrypt": "^5.0.0",
+        "express": "^4.17.1",
+        "express-cors": "0.0.3",
+        "express-session": "^1.17.1",
+        "joi": "^17.2.1",
+        "lodash": "^4.17.20",
+        "mongoose": "^5.10.9",
+        "request-promise": "^4.2.6",
+        "tough-cookie": "^4.0.0"
+    }
+}

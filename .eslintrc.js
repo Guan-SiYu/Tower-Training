@@ -1,11 +1,19 @@
 module.exports = {
 	env: {
-		es6: true,
-		node: true,
-		mocha: true,
+		browser: true,
+		es2021: true,
 	},
 	extends: 'airbnb-base',
-	root: true,
+	parserOptions: {
+		ecmaFeatures: {
+			jsx: true,
+		},
+		ecmaVersion: 12,
+		sourceType: 'module',
+	},
+	plugins: [
+		'react',
+	],
 	rules: {
 		'no-tabs': 0,
 		indent: [

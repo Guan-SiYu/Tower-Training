@@ -1,0 +1,21 @@
+#root {
+    width: 60%;
+    margin: 110px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #7fc1c1;
+}
+.navbar {
+    margin: 20px 0;
+}
+.game-btn-group {
+    display: flex;
+    justify-content: space-between;
+}
+.game-btn-group button {
+    border: none;
+    background-color: blueviolet;
+    width: 45%;
+}
